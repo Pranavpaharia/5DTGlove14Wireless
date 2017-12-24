@@ -1,0 +1,195 @@
+Description,Constant
+Left mouse button,0x01
+Right mouse button,0x02
+Controlbreak processing,0x03
+Middle mouse button (threebutton mouse),0x04
+X1 mouse button,0x05
+X2 mouse button,0x06
+Undefined,0x07
+BACKSPACE key,0x08
+TAB key,0x09
+Reserved,0x0A
+Reserved,0x0B
+CLEAR key,0x0C
+ENTER key,0x0D
+Undefined,0x0E
+Undefined,0x0F
+SHIFT key,0x10
+CTRL key,0x11
+ALT key,0x12
+PAUSE key,0x13
+CAPS LOCK key,0x14
+IME Kana mode,0x15
+IME Hanguel mode (maintained for compatibility; use ,0x15
+IME Hangul mode,0x15
+Undefined,0x16
+IME Junja mode,0x17
+IME final mode,0x18
+IME Hanja mode,0x19
+IME Kanji mode,0x19
+Undefined,0x1A
+ESC key,0x1B
+IME convert,0x1C
+IME nonconvert,0x1D
+IME accept,0x1E
+IME mode change request,0x1F
+SPACEBAR,0x20
+PAGE UP key,0x21
+PAGE DOWN key,0x22
+END key,0x23
+HOME key,0x24
+LEFT ARROW key,0x25
+UP ARROW key,0x26
+RIGHT ARROW key,0x27
+DOWN ARROW key,0x28
+SELECT key,0x29
+PRINT key,0x2A
+EXECUTE key,0x2B
+PRINT SCREEN key,0x2C
+INS key,0x2D
+DEL key,0x2E
+HELP key,0x2F
+0 key,0x30
+1 key,0x31
+2 key,0x32
+3 key,0x33
+4 key,0x34
+5 key,0x35
+6 key,0x36
+7 key,0x37
+8 key,0x38
+9 key,0x39
+Undefined,0x3A
+A key,0x41
+B key,0x42
+C key,0x43
+D key,0x44
+E key,0x45
+F key,0x46
+G key,0x47
+H key,0x48
+I key,0x49
+J key,0x4A
+K key,0x4B
+L key,0x4C
+M key,0x4D
+N key,0x4E
+O key,0x4F
+P key,0x50
+Q key,0x51
+R key,0x52
+S key,0x53
+T key,0x54
+U key,0x55
+V key,0x56
+W key,0x57
+X key,0x58
+Y key,0x59
+Z key,0x5A
+Left Windows key (Natural keyboard),0x5B
+Right Windows key (Natural keyboard),0x5C
+Applications key (Natural keyboard),0x5D
+Reserved,0x5E
+Computer Sleep key,0x5F
+Numeric keypad 0 key,0x60
+Numeric keypad 1 key,0x61
+Numeric keypad 2 key,0x62
+Numeric keypad 3 key,0x63
+Numeric keypad 4 key,0x64
+Numeric keypad 5 key,0x65
+Numeric keypad 6 key,0x66
+Numeric keypad 7 key,0x67
+Numeric keypad 8 key,0x68
+Numeric keypad 9 key,0x69
+Multiply key,0x6A
+Add key,0x6B
+Separator key,0x6C
+Subtract key,0x6D
+Decimal key,0x6E
+Divide key,0x6F
+F1 key,0x70
+F2 key,0x71
+F3 key,0x72
+F4 key,0x73
+F5 key,0x74
+F6 key,0x75
+F7 key,0x76
+F8 key,0x77
+F9 key,0x78
+F10 key,0x79
+F11 key,0x7A
+F12 key,0x7B
+F13 key,0x7C
+F14 key,0x7D
+F15 key,0x7E
+F16 key,0x7F
+F17 key,0x80
+F18 key,0x81
+F19 key,0x82
+F20 key,0x83
+F21 key,0x84
+F22 key,0x85
+F23 key,0x86
+F24 key,0x87
+Unassigned,0x88
+NUM LOCK key,0x90
+SCROLL LOCK key,0x91
+OEM specific,0x92
+Unassigned,0x97
+Left SHIFT key,0xA0
+Right SHIFT key,0xA1
+Left CONTROL key,0xA2
+Right CONTROL key,0xA3
+Left MENU key,0xA4
+Right MENU key,0xA5
+Browser Back key,0xA6
+Browser Forward key,0xA7
+Browser Refresh key,0xA8
+Browser Stop key,0xA9
+Browser Search key,0xAA
+Browser Favorites key,0xAB
+Browser Start and Home key,0xAC
+Volume Mute key,0xAD
+Volume Down key,0xAE
+Volume Up key,0xAF
+Next Track key,0xB0
+Previous Track key,0xB1
+Stop Media key,0xB2
+Play/Pause Media key,0xB3
+Start Mail key,0xB4
+Select Media key,0xB5
+Start Application 1 key,0xB6
+Start Application 2 key,0xB7
+Reserved,0xB8
+Used for miscellaneous characters; it can vary by keyboard.,0xBA
+"For the US standard keyboard, the ';:' key, For any country/region, the '+' key",0xBB
+"For any country/region, the ',' key",0xBC
+"For any country/region, the '' key",0xBD
+"For any country/region, the '.' key",0xBE
+Used for miscellaneous characters; it can vary by keyboard.,0xBF
+Used for miscellaneous characters; it can vary by keyboard.,0xC0
+Reserved,0xC1
+Unassigned,0xD8
+Used for miscellaneous characters; it can vary by keyboard.,0xDB
+Used for miscellaneous characters; it can vary by keyboard.,0xDC
+Used for miscellaneous characters; it can vary by keyboard.,0xDD
+Used for miscellaneous characters; it can vary by keyboard.,0xDE
+Used for miscellaneous characters; it can vary by keyboard.,0xDF
+Reserved,0xE0
+OEM specific,0xE1
+Either the angle bracket key or the backslash key on the RT 102key keyboard,0xE2
+OEM specific,0xE3
+IME PROCESS key,0xE5
+OEM specific,0xE6
+Used to pass Unicode characters as if they were keystrokes. The ,0xE7
+Unassigned,0xE8
+OEM specific,0xE9
+Attn key,0xF6
+CrSel key,0xF7
+ExSel key,0xF8
+Erase EOF key,0xF9
+Play key,0xFA
+Zoom key,0xFB
+Reserved,0xFC
+PA1 key,0xFD
+Clear key,0xFE
