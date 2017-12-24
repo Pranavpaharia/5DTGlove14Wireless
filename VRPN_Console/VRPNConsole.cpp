@@ -259,7 +259,7 @@ int main(int argc, char* argv[])
 {
 	data_t data;
 
-	string filenameL = "C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\GloveInput.csv";
+	string filenameL = "C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\GloveInputL.csv";
 	string filenameR = "C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\GloveInputR.csv";
 	string filenameStandard = "C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\StandardInputFile.csv";
 	
