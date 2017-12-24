@@ -13,114 +13,209 @@
 #include <vector>
 #include <map>
 using namespace std;
-unsigned tracker_stride = 1;
-//float CurrentTime;
+
 int ExeTime;
 WORD ColorIndex = 10;
 struct tm now;
 INPUT keyboardInput;
 
-vector<string> DocWords;
-map<string, string> KeyInputMap;
+vector<string> LeftHandUserInputList;
+map<string, string> LeftHandKeyInputMap;
+
+vector<string> RightHandUserInputList;
+map<string, string> RightHandKeyInputMap;
 
 vector<string> StandardKeyList;
 map<string, string> StandardKeyMap;
 
 struct data_t : deque <deque <float> >
 {
-	typedef deque <deque <float> > ::iterator record_iterator;
-	typedef deque        <float>   ::iterator field_iterator;
-	bool load(const string& filename);
-	bool loadStandardMapFile(const string& filename);
+	bool loadRightHandUserInputFile(const string& filename);
+	bool loadLeftHandUserInputFile(const string& filename);
+	bool loadStandardInputFile(const string& filename);
+	bool createUserLeftHandInputMap(const vector<string>& fileList);
+	bool createUserRightHandInputMap(const vector<string>& fileList);
+	bool createStandardInputMap(const vector<string>& fileList);
 	bool save(const string& filename);
-	bool save(ostream& outs);
 };
 
-bool loadStandardMapFile(const string& filename)
+bool data_t::createUserLeftHandInputMap(const vector<string>& fileList)
 {
+	bool bMapCreated = false;
+
+	if (fileList.capacity() < 1)
+	{
+		bMapCreated = false;
+	}
+	else
+	{
+		bMapCreated = true;
+	}
+
+	for (int i = 0; i < fileList.size(); i++)
+	{
+		if (i % 2 == 0)
+		{
+			LeftHandKeyInputMap[fileList[i]] = fileList[i + 1];
+		}
+	}
+
+	return bMapCreated;
+}
+
+bool data_t::createUserRightHandInputMap(const vector<string>& fileList)
+{
+	bool bMapCreated = false;
+
+	if (fileList.capacity() < 1)
+	{
+		bMapCreated = false;
+	}
+	else
+	{
+		bMapCreated = true;
+	}
+
+	for (int i = 0; i < fileList.size(); i++)
+	{
+		if (i % 2 == 0)
+		{
+			RightHandKeyInputMap[fileList[i]] = fileList[i + 1];
+		}
+	}
+
+	return bMapCreated;
+}
+
+bool data_t::createStandardInputMap(const vector<string>& fileList)
+{
+	bool bMapCreated = false;
+
+	if (fileList.capacity() < 1)
+	{
+		bMapCreated = false;
+	}
+	else
+	{
+		bMapCreated = true;
+	}
+
+	for (int i = 0; i < (fileList.size() - 1); i++)
+	{
+		if (i % 2 == 0)
+		{
+			StandardKeyMap[fileList[i]] = fileList[i + 1];
+		}
+	}
+
+	return bMapCreated;
+}
+
+
+bool data_t::loadStandardInputFile(const string& filename)
+{
+	bool status = false;
 	string s;
 	ifstream read;
-
 	read.open(filename);
 	if (read.fail())
 	{
-		cout << "File Read Failed";
+		cout << "Standard Input Configuration File Read Failed! \n";
 	}
-
 	else
 	{
-		cout << "StandardMap File Read Successful";
+		cout << "Standard Input Configuration File Read Successful! \n";
 	}
 
 	while (getline(read, s))
 	{
-		deque <string> record;
 		istringstream iss(s);
-		int index = 0;
 		while (getline(iss, s, ','))
 		{
-			float fieldvalue = 0.0f;
-			istringstream(s) >> fieldvalue;
-			record.push_back(s);
 			StandardKeyList.push_back(s);
-			index++;
+			status = true;
 		}
-		//this->push_back(record);
 	}
-	return true;
+	return status;
 }
-bool data_t::load(const string& filename)
+
+bool data_t::loadLeftHandUserInputFile(const string& filename)
 {
+	bool status = false;
 	string s;
 	ifstream read;
-	//	read.open("C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\GloveInput.txt");
 	read.open(filename);
 	if (read.fail())
 	{
-		cout << "File Read Failed";
+		cout << "User Input Configuration File Read Failed! \n";
 	}
-
 	else
 	{
-		cout << "File Read Successful";
+		cout << "User Input Configuration File Read Successfully! \n";
 	}
 
 	while (getline(read, s))
 	{
-		deque <string> record;
+		deque <float> record;
 		istringstream iss(s);
-		int index =0;
 		while (getline(iss, s, ','))
 		{
-			float fieldvalue = 0.0f;
-			istringstream(s) >> fieldvalue;
-			record.push_back(s);
-			DocWords.push_back(s);
-			index++;
+			LeftHandUserInputList.push_back(s);
+			status = true;
 		}
-		//this->push_back(record);
+
 	}
-	return true;
+	return status;
 }
 
-void SetDictionary()
+bool data_t::loadRightHandUserInputFile(const string& filename)
 {
-	for (int i = 0;i < (DocWords.size()-1);i++)
+	bool status = false;
+	string s;
+	ifstream read;
+	read.open(filename);
+	if (read.fail())
 	{
-		if(i % 2 == 0)
-			KeyInputMap[DocWords[i]] = DocWords[i + 1];
+		cout << "User Input Configuration File Read Failed! \n";
 	}
+	else
+	{
+		cout << "User Input Configuration File Read Successfully! \n";
+	}
+
+	while (getline(read, s))
+	{
+		deque <float> record;
+		istringstream iss(s);
+		while (getline(iss, s, ','))
+		{
+			RightHandUserInputList.push_back(s);
+			status = true;
+		}
+
+	}
+	return status;
 }
 
 
-void PressKeyA()
+
+void PressKeyA(string GestureString)
 {
+	int x;
+	stringstream sstream;
+	sstream << std::hex << GestureString;
+	sstream >> x;
+
+
+
 	keyboardInput.type = INPUT_KEYBOARD;
 	keyboardInput.ki.wScan = 0;
 	keyboardInput.ki.time = 0;
 	keyboardInput.ki.dwExtraInfo = 0;
 
-	keyboardInput.ki.wVk = 0x41;
+
+
+	keyboardInput.ki.wVk = x; //0x41;
 	keyboardInput.ki.dwFlags = 0;
 
 	SendInput(1, &keyboardInput, sizeof(keyboardInput));
@@ -128,59 +223,87 @@ void PressKeyA()
 	keyboardInput.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &keyboardInput, sizeof(INPUT));
 }
+
+void PrintMapValues(const map<string, string> tMap)
+{
+	for (const auto& tMapPair : tMap)
+	{
+		cout << " Key:  " << tMapPair.first << " | Value:  " << tMapPair.second << endl;
+	}
+}
+
+string GetLeftHandHexValue(const string GestureString)
+{
+	string hexValue = "";
+	string KeyboardInputValue = "";
+	KeyboardInputValue = LeftHandKeyInputMap[GestureString];
+
+	hexValue = StandardKeyMap[KeyboardInputValue];
+
+	return hexValue;
+}
+
+string GetRightHandHexValue(const string GestureString)
+{
+	string hexValue = "";
+	string KeyboardInputValue = "";
+	KeyboardInputValue = RightHandKeyInputMap[GestureString];
+
+	hexValue = StandardKeyMap[KeyboardInputValue];
+
+	return hexValue;
+}
+
+
 int main(int argc, char* argv[])
 {
-	//Testing read CSV File 
-	// <string> DocWords;
 	data_t data;
 
-	string filename = "C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\GloveInput.csv";
-	filename = "D:\\Development\\Projects for C++\\VRPN_Console_Basic\\VRPN_Console\\KeyConfig.csv";
-	cout << "File to read: \n";
-	//getline(cin, filename);
-
-	if (data.load(filename))
+	string filenameL = "C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\GloveInput.csv";
+	string filenameR = "C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\GloveInputR.csv";
+	string filenameStandard = "C:\\Work\\VRPN_Console_Basic\\VRPN_Console\\StandardInputFile.csv";
+	
+	if (data.loadStandardInputFile(filenameStandard))
 	{
-		SetDictionary();
-		for (auto address_entry : KeyInputMap)
-		{
-			cout << endl<< address_entry.first << " || " << address_entry.second << " " << endl;
-		}
+		data.createStandardInputMap(StandardKeyList);
+	}
+
+	if (data.loadLeftHandUserInputFile(filenameL))
+	{
+		data.createUserLeftHandInputMap(LeftHandUserInputList);
+	}
+
+	if (data.loadRightHandUserInputFile(filenameR))
+	{
+		data.createUserRightHandInputMap(RightHandUserInputList);
 	}
 		
-
-	//cout << "The data is: %s \n", KeyInputMap[0];
-
 	
-
-	getchar();
-	return 0;
-
-
 	//////////////////////////////////////////////////////////////////////////
 	char* pPort = "COM1";
 	HANDLE hConsole;
 	
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	fdGlove* LeftGlove = fdOpen(pPort);
+	fdGlove* RightGlove = fdOpen(pPort);
 
-	if (LeftGlove == NULL)
+	if (LeftGlove == NULL || RightGlove == NULL)
 	{
 		printf("5DT Glove Detected Not Detected \n");
 	}
 
 	else
 	{
-		printf("5DT Glove Detected. Checking Version...\n");
+		printf("5DT Glove Detected Left Hand. Checking Version...\n");
 	}
 
 
-	EfdGloveHand eHand;
+	EfdGloveHand eLHand;
 	int id = fdGetGloveHand(LeftGlove);
 
-	eHand = static_cast<EfdGloveHand>(id);
+	eLHand = static_cast<EfdGloveHand>(id);
 
-	switch (eHand)
+	switch (eLHand)
 	{
 	case FD_HAND_LEFT: printf("5DT Glove Left Hand Detected \n");
 		break;
@@ -192,11 +315,60 @@ int main(int argc, char* argv[])
 		break;
 	}
 
-	EfdGloveTypes eType;
-	int pid = fdGetGloveType(LeftGlove);
-	eType = static_cast<EfdGloveTypes>(pid);
+	EfdGloveTypes eLType;
+	int idL = fdGetGloveType(LeftGlove);
+	eLType = static_cast<EfdGloveTypes>(idL);
 
-	switch (eType)
+	switch (eLType)
+	{
+	case FD_GLOVENONE:
+		break;
+	case FD_GLOVE5U:
+		break;
+	case FD_GLOVE5UW:
+		break;
+	case FD_GLOVE5U_USB:
+		break;
+	case FD_GLOVE7:
+		break;
+	case FD_GLOVE7W:
+		break;
+	case FD_GLOVE16:
+		break;
+	case FD_GLOVE16W:
+		break;
+	case FD_GLOVE14U:
+		break;
+	case FD_GLOVE14UW: printf("Data Gloves 14 Wireless Selected! \n");
+		break;
+	case FD_GLOVE14U_USB:
+		break;
+	default:printf("Data Gloves Selection Error! Can't find Data Gloves Types \n");
+		break;
+	}
+
+	EfdGloveHand eRHand;
+	int idr = fdGetGloveHand(RightGlove);
+
+	eRHand = static_cast<EfdGloveHand>(idr);
+
+	switch (eRHand)
+	{
+	case FD_HAND_LEFT: printf("5DT Glove Left Hand Detected \n");
+		break;
+
+	case FD_HAND_RIGHT: printf("5DT Glove Right Hand Detected \n");
+		break;
+
+	default:  printf("Glove Type Detection Error. \n");
+		break;
+	}
+
+	EfdGloveTypes eRType;
+	int idR = fdGetGloveType(RightGlove);
+	eRType = static_cast<EfdGloveTypes>(idR);
+
+	switch (eRType)
 	{
 	case FD_GLOVENONE:
 		break;
@@ -226,13 +398,8 @@ int main(int argc, char* argv[])
 
 	int fGetSensorID = fdGetNumSensors(LeftGlove);
 
-	unsigned short thumbIndexSensor;
-	unsigned short thumbFarSensor;
-	unsigned short thumbNearSensor;
-
-	int NumberOfGestures;
-	int CurrentGesture;
-	int CurrentGestureA;
+	int CurrentGestureL;
+	int CurrentGestureR;
 
 	time_t CurrentTime = time(0);
 	localtime_s(&now, &CurrentTime);
@@ -246,7 +413,7 @@ int main(int argc, char* argv[])
 		if(ExeTime != now.tm_sec)
 		{ 
 			SetConsoleTextAttribute(hConsole, ColorIndex);
-			thumbIndexSensor = fdGetSensorRaw(LeftGlove, 2);
+			/*thumbIndexSensor = fdGetSensorRaw(LeftGlove, 2);
 			printf("Thumb Index data values! : %d \n", thumbIndexSensor);
 
 			thumbFarSensor = fdGetSensorRaw(LeftGlove, 1);
@@ -256,59 +423,249 @@ int main(int argc, char* argv[])
 			printf("Thumb Near data values! : %d \n", thumbNearSensor);
 			
 			NumberOfGestures = fdGetNumGestures(LeftGlove);
-			printf("Number of Gestures! : %d \n", NumberOfGestures);
+			printf("Number of Gestures! : %d \n", NumberOfGestures);*/
 
-			CurrentGesture = fdGetGesture(LeftGlove);
-			printf("Get Gesture ! : %d \n", CurrentGesture);
+			CurrentGestureL = fdGetGesture(LeftGlove);
+			//printf("Get Gesture ! : %d \n", CurrentGesture);
 			
-			CurrentGestureA = fdGetGestureA(LeftGlove);
-			printf("Get Gesture A ! : %d \n", CurrentGestureA);
+			CurrentGestureR = fdGetGestureA(RightGlove);
+			//printf("Get Gesture A ! : %d \n", CurrentGestureR);
 
-
-			switch (CurrentGesture)
+			switch (CurrentGestureL)
 			{
-			case 0: printf("Fist! \n");
-				PressKeyA();
-				break;
-			case 1: printf("Index Finger Point! \n");
-				PressKeyA();
-				break;
-			case 2: printf("Index Finger Point!  \n");
-				PressKeyA();
-				break;
-			case 3: printf("Middle Finger Point!  \n");
-				PressKeyA();
-				break;
-			case 4: printf("Ring Finger Point!  \n");
-				PressKeyA();
-				break;
-			case 5: printf("Ring-Index Finger Point!  \n");
-				break;
-			case 6: printf("Ring-Middle Finger Point!  \n");
-				break;
-			case 7: printf("Three Finger Point!  \n");
-				break;
-			case 8: printf("Little Finger Point!  \n");
-				break;
-			case 9: printf("Index and little Finger Point!  \n");
-				break;
-			case 10: printf("Little-Middle Finger Point!  \n");
-				break;
-			case 11: printf("Not ring  Finger Point!  \n");
-				break;
-			case 12: printf("Little-Ring Finger Point!  \n");
-				break;
-			case 13: printf("Not middle Finger Point!  \n");
-				break;
-			case 14: printf("Not Index Finger Point!  \n");
-				break;
-			case 15: printf("Flat Hand!  \n");
-				break;
-			default: printf("Unrecorded gesture %d \n", CurrentGesture);
-				PressKeyA();
+					case 0: printf("RightHand Fist! \n");
+						{
+							string Gesture = "Fist";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 1: printf("RightHand Index Finger Point! \n");
+						{
+							string Gesture = "Index-Finger";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 2: printf("RightHand Middle Finger Point!  \n");
+						{
+							string Gesture = "Middle-Finger";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 3: printf("RightHand Two Finger Point!  \n");
+						{
+							string Gesture = "Two-Finger";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 4: printf("RightHand Ring Finger Point!  \n");
+						{
+							string Gesture = "Ring-Finger";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+					break;
+					case 5: printf("RightHand Ring-Index Finger Point!  \n");
+						{
+							string Gesture = "Ring-Index-Finger";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 6: printf("RightHand Ring-Middle Finger Point!  \n");
+						{
+							string Gesture = "Ring-Middle-Finger";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 7: printf("RightHand Three Finger Point!  \n");
+						{
+							string Gesture = "Three-Finger-Point";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 8: printf("RightHand Little Finger Point!  \n");
+						{
+							string Gesture = "Little-Finger-Point";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 9: printf("RightHand Index and little Finger Point!  \n");
+						{
+							string Gesture = "Index-Little-Finger-Point";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 10: printf("RightHand Little-Middle Finger Point!  \n");
+						{
+							string Gesture = "Little-Middle-Finger-Point";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 11: printf("RightHand Not ring  Finger Point!  \n");
+						{
+							string Gesture = "Not-Ring-Finger-Point";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 12: printf("RightHand Little-Ring Finger Point!  \n");
+						{
+							string Gesture = "Little-Ring-Finger-Point";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 13: printf("RightHand Not middle Finger Point!  \n");
+						{
+							string Gesture = "Not-Middle-Finger-Point";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 14: printf("RightHand Not Index Finger Point!  \n");
+						{
+							string Gesture = "Not-Index-Finger-Point";
+							string str = GetLeftHandHexValue(Gesture);
+							PressKeyA(str);
+						}
+						break;
+					case 15: printf("RightHand Flat Hand!  \n");
+					{
+						string Gesture = "Flat-Hand";
+						string str = GetLeftHandHexValue(Gesture);
+						PressKeyA(str);
+					}
+					break;
+					default: printf("RightHand Unrecorded gesture %d \n", CurrentGestureL);
+						//PressKeyA();
 
 			}
 
+			switch (CurrentGestureR)
+			{
+			case 0: printf("LeftHand Fist! \n");
+			{
+				string Gesture = "Fist Right";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 1: printf("LeftHand Index Finger Point! \n");
+			{
+				string Gesture = "Index-Finger";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 2: printf("LeftHand Middle Finger Point!  \n");
+			{
+				string Gesture = "Middle-Finger";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 3: printf("LeftHand Two Finger Point!  \n");
+			{
+				string Gesture = "Two-Finger";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 4: printf("LeftHand Ring Finger Point!  \n");
+			{
+				string Gesture = "Ring-Finger";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 5: printf("LeftHand Ring-Index Finger Point!  \n");
+			{
+				string Gesture = "Ring-Index-Finger";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 6: printf("LeftHand Ring-Middle Finger Point!  \n");
+			{
+				string Gesture = "Ring-Middle-Finger";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 7: printf("LeftHand Three Finger Point!  \n");
+			{
+				string Gesture = "Three-Finger-Point";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 8: printf("LeftHand Little Finger Point!  \n");
+			{
+				string Gesture = "Little-Finger-Point";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 9: printf("LeftHand Index and little Finger Point!  \n");
+			{
+				string Gesture = "Index-Little-Finger-Point";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 10: printf("LeftHand Little-Middle Finger Point!  \n");
+			{
+				string Gesture = "Little-Middle-Finger-Point";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 11: printf("LeftHand Not ring  Finger Point!  \n");
+			{
+				string Gesture = "Not-Ring-Finger-Point";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 12: printf("LeftHand Little-Ring Finger Point!  \n");
+			{
+				string Gesture = "Little-Ring-Finger-Point";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 13: printf("LeftHand Not middle Finger Point!  \n");
+			{
+				string Gesture = "Not-Middle-Finger-Point";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 14: printf("LeftHand Not Index Finger Point!  \n");
+			{
+				string Gesture = "Not-Index-Finger-Point";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+			break;
+			case 15: printf("LeftHand Flat \n");
+			{
+				string Gesture = "Flat-Hand";
+				string str = GetRightHandHexValue(Gesture);
+				PressKeyA(str);
+			}
+
+			}
+			
 			ExeTime = now.tm_sec;
 			ColorIndex++;
 
